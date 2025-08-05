@@ -55,5 +55,20 @@ public class PokemonRepositoryTests {
 
     }
 
+    @Test
+    public void PokemonRepository_FindById_ReturnPokemon() {
+
+        //Arrange
+        Pokemon pokemon = Pokemon.builder().name("pikachu").type("electric").id(1).build();
+
+        //Act
+        pokemonRepository.save(pokemon);
+
+        //Assert
+        Pokemon returnedPokemon = pokemonRepository.findById(1).get();
+        Assertions.assertThat(returnedPokemon).isNotNull();
+
+    }
+
 
 }
