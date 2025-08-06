@@ -70,5 +70,28 @@ public class PokemonRepositoryTests {
 
     }
 
+    @Test
+    public void PokemonRepository_UpdatePokemon_ReturnUpdatedPokemon() {
+
+        //Arrange
+        Pokemon pokemon = Pokemon.builder().name("pikachu").type("electric").build();
+        pokemonRepository.save(pokemon);
+
+        //Act
+        Pokemon pokemonToChange = pokemonRepository.findById(pokemon.getId()).get();
+        pokemonToChange.setType("Electric");
+        pokemonToChange.setName("Raichu");
+
+        Pokemon updatedPokemon = pokemonRepository.save(pokemonToChange);
+
+        //Assert
+        Assertions.assertThat(updatedPokemon).isNotNull();
+        Assertions.assertThat(updatedPokemon.getType()).isEqualTo("Electric");
+        Assertions.assertThat(updatedPokemon.getType()).isNotNull();
+        Assertions.assertThat(updatedPokemon.getName()).isEqualTo("Raichu");
+
+    }
+
+
 
 }
