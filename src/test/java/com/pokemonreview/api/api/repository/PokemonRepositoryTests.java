@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -92,6 +93,21 @@ public class PokemonRepositoryTests {
 
     }
 
+    @Test
+    public void PokemonRepository_DeletePokemon_ReturnPokemonIsEmpty () {
+
+        //Arrange
+        Pokemon pokemon = Pokemon.builder().name("pikachu").type("electric").build();
+        pokemonRepository.save(pokemon);
+
+        //Act
+        pokemonRepository.deleteById(pokemon.getId());
+        Optional<Pokemon> deletedPokemon  = pokemonRepository.findById(pokemon.getId());
+
+        //Assert
+        Assertions.assertThat(deletedPokemon).isEmpty();
+
+    }
 
 
 }
