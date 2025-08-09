@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -50,5 +51,62 @@ public class ReviewRepositoryTests {
         Assertions.assertThat(reviews.size()).isGreaterThan(1);
 
     }
+
+    @Test
+    public void ReviewRepository_GetAll_ReturnsSavedReview() {
+
+        //Arrange
+        Review review = Review.builder().title("title").content("content").stars(5).build();
+
+        //Act
+        Review savedReview = reviewRepository.save(review);
+
+        //Assert
+        Assertions.assertThat(savedReview).isNotNull();
+        Assertions.assertThat(savedReview.getId()).isGreaterThan(0);
+
+
+    }
+
+    @Test
+    public void ReviewRepository_UpdateReview_ReturnsUpdatedReview() {
+
+        Review review = Review.builder().title("title").content("content").stars(5).build();
+
+        Review savedReview = reviewRepository.save(review);
+        savedReview.setTitle("updatedTitle");
+        savedReview.setContent("updatedContent");
+
+        savedReview = reviewRepository.save(savedReview);
+
+        Assertions.assertThat(savedReview).isNotNull();
+        Assertions.assertThat(savedReview.getId()).isGreaterThan(0);
+        Assertions.assertThat(savedReview.getTitle()).isEqualTo("updatedTitle");
+        Assertions.assertThat(savedReview.getContent()).isEqualTo("updatedContent");
+
+    }
+
+    @Test
+    public void ReviewRepository_DeleteReview_ReturnsDeletedReview() {
+
+        Review review =  Review.builder().title("title").content("content").stars(5).build();
+        Review savedReview = reviewRepository.save(review);
+
+        reviewRepository.delete(savedReview);
+
+        Optional<Review> deletedReview = reviewRepository.findById(savedReview.getId());
+
+        Assertions.assertThat(deletedReview).isNotPresent();
+        Assertions.assertThat(deletedReview).isEmpty();
+
+    }
+
+
+
+
+
+
+
+
 
 }
